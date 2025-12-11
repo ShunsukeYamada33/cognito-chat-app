@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot</title>
+    <!-- Amazon Cognito Identity SDK -->
+    <script src="https://unpkg.com/amazon-cognito-identity-js/dist/amazon-cognito-identity.min.js"></script>
+    <!-- CSS 読み込み -->
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">AI Chatbot</div>
+
+        <div class="chat-messages" id="chat-messages"></div>
+
+        <div class="chat-input">
+            <input type="text" id="user-input" class="user-input" placeholder="メッセージを入力">
+            <button id="send-button" class="send-button">送信</button>
+        </div>
+    </div>
+
+    <!-- JS 読み込み -->
+    <script src="script.js"></script>
+</body>
+</html>
