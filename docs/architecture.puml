@@ -1,0 +1,38 @@
+@startuml AWS Chat System with Cognito Authentication
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v20.0/dist
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/General/User.puml
+!include AWSPuml/NetworkingContentDelivery/APIGateway.puml
+!include AWSPuml/NetworkingContentDelivery/CloudFront.puml
+!include AWSPuml/NetworkingContentDelivery/CloudFrontFunctions.puml
+!include AWSPuml/SecurityIdentityCompliance/Cognito.puml
+!include AWSPuml/Compute/Lambda.puml
+!include AWSPuml/Storage/SimpleStorageService.puml
+!include AWSPuml/ArtificialIntelligence/Bedrock.puml
+
+left to right direction
+User(user, "User", "Browser")
+CloudFront(cf, "CloudFront","Distribution")
+CloudFrontFunctions(cff,"CloudFront Function","Auth Check")
+Cognito(cog, "Cognito User Pool\nHosted UI", "OAuth2 / ID Token")
+SimpleStorageService(s3, "S3", "index.html / JS")
+APIGateway(api, "API Gateway\nChat API", "POST /prod")
+Lambda(lambda, "Lambda\nChat Handler", "Invoke Bedrock")
+Bedrock(bedrock, "Amazon Bedrock\n(Nova Micro)", "AI Chat Response")
+
+user --> cf : Access https://xxxx.cloudfront.net/
+cf --> cff : viewer-request\n(auth check)
+cff --> cog : if no cookie\nRedirect to Hosted UI
+
+cog --> cf : redirect_uri with\nid_token or code
+
+cf --> s3 : Serve index.html / JS
+
+cf --> api : POST /prod\n(Authorization: id_token)
+api --> lambda : Invoke
+lambda --> bedrock : converse()
+bedrock --> lambda : AI response
+lambda --> api : JSON reply
+api --> cf : Return response
+@enduml

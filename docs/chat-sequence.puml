@@ -1,0 +1,26 @@
+@startuml Sequence Diagram Cognito Authentication Flow
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v20.0/dist
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/General/User.puml
+!include AWSPuml/NetworkingContentDelivery/APIGateway.puml
+!include AWSPuml/NetworkingContentDelivery/CloudFront.puml
+!include AWSPuml/SecurityIdentityCompliance/Cognito.puml
+!include AWSPuml/Compute/Lambda.puml
+!include AWSPuml/ArtificialIntelligence/Bedrock.puml
+
+UserParticipant(user, "User", "Browser")
+CloudFrontParticipant(cf, CloudFront,Distribution)
+APIGatewayParticipant(api, api, index.html / JS)
+LambdaParticipant(lambda, lambda, index.html / JS)
+BedrockParticipant(bedrock, lambda, index.html / JS)
+
+user -> cf++ $AWSColor(Compute): message
+cf -> api++ $AWSColor(a): POST /prod\n(Authorization: id_token)
+api -> lambda++ $AWSColor(a): Invoke
+lambda -> bedrock++ $AWSColor(a): converse()
+return AI response
+return JSON reply
+return Return response
+return AI message
+@enduml

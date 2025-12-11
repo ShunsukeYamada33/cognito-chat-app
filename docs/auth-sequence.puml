@@ -1,0 +1,25 @@
+@startuml Sequence Diagram Cognito Authentication Flow
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v20.0/dist
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/General/User.puml
+!include AWSPuml/NetworkingContentDelivery/CloudFront.puml
+!include AWSPuml/NetworkingContentDelivery/CloudFrontFunctions.puml
+!include AWSPuml/SecurityIdentityCompliance/Cognito.puml
+!include AWSPuml/Storage/SimpleStorageService.puml
+
+UserParticipant(user, "User", "Browser")
+CloudFrontParticipant(cf, CloudFront,Distribution)
+CloudFrontFunctionsParticipant(cff, Function,Auth Check)
+CognitoParticipant(cog, Cognito User Pool\nHosted UI, OAuth2 / ID Token)
+SimpleStorageServiceParticipant(s3, S3, index.html / JS)
+
+user -> cf++ $AWSColor(Compute): Access https://xxxx.cloudfront.net/
+cf -> cff++ $AWSColor(a): viewer-request\n(auth check)
+cff -> cog++ $AWSColor(a): if no cookie\nRedirect to Hosted UI
+return redirect_uri with\nid_token or code
+return redirect_uri with\nid_token or code
+cf -> s3++ $AWSColor(a): Serve index.html / JS
+return Return index.html / JS
+return Render UI
+@enduml

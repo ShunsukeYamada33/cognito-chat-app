@@ -21,8 +21,7 @@ CloudFront Functions が未認証ユーザーをリダイレクト
 Lambda が Bedrock の Nova micro に問い合わせて返答する
 
 ## 全体アーキテクチャ図
-
-architecture/architecture-diagram.png を掲載
+/docs/architecture.puml に掲載
 
 ## デプロイ方法（簡易）
 
