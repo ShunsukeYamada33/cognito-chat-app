@@ -24,15 +24,10 @@ Bedrock(bedrock, "Amazon Bedrock\n(Nova Micro)", "AI Chat Response")
 user --> cf : Access https://xxxx.cloudfront.net/
 cf --> cff : viewer-request\n(auth check)
 cff --> cog : if no cookie\nRedirect to Hosted UI
+cf --> s3 : Serve static resources
 
-cog --> cf : redirect_uri with\nid_token or code
-
-cf --> s3 : Serve index.html / JS
-
-cf --> api : POST /prod\n(Authorization: id_token)
+cf --> api : message
 api --> lambda : Invoke
-lambda --> bedrock : converse()
-bedrock --> lambda : AI response
-lambda --> api : JSON reply
-api --> cf : Return response
+lambda --> bedrock : message
+
 @enduml

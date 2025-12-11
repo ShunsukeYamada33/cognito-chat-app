@@ -18,7 +18,7 @@ user -> cf++ $AWSColor(Compute): Access https://xxxx.cloudfront.net/
 cf -> cff++ $AWSColor(a): viewer-request\n(auth check)
 cff -> cog++ $AWSColor(a): if no cookie\nRedirect to Hosted UI
 return redirect_uri with\nid_token or code
-return redirect_uri with\nid_token or code
+return Set-Cookie\nReturn authenticated request
 cf -> s3++ $AWSColor(a): Serve index.html / JS
 return Return index.html / JS
 return Render UI
