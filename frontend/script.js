@@ -57,32 +57,27 @@ async function sendMessage() {
     }
 
     try {
-console.log(JSON.stringify({ message: text }));
+        console.log(JSON.stringify({message: text}));
         const response = await fetch("https://bblfrud3i7.execute-api.ap-northeast-1.amazonaws.com/prod/chat", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": ID_TOKEN
-            },
-            body: JSON.stringify({ message: text })
+            method: "POST", headers: {
+                "Content-Type": "application/json", "Authorization": ID_TOKEN
+            }, body: JSON.stringify({message: text})
         });
 
-	if (response.status === 401) {
-    		window.location.href = "/login.html";
-	}
+        if (response.status === 401) {
+            window.location.href = "/login.html";
+        }
 
-	const raw = await response.text();
-	console.log("API raw text:", raw);
+        const raw = await response.text();
 
-	const outer = JSON.parse(raw);   // statusCode, headers, body を持つ
-	const inner = JSON.parse(outer.body); // body の中の JSON をパース
-	console.log("Parsed inner body:", inner);
+        const outer = JSON.parse(raw);   // statusCode, headers, body を持つ
+        const inner = JSON.parse(outer.body); // body の中の JSON をパース
 
-	if (inner.reply) {
-	    addMessage(inner.reply, "bot");
-	} else {
-	    addMessage("AI 応答が取得できませんでした。", "bot");
-	}
+        if (inner.reply) {
+            addMessage(inner.reply, "bot");
+        } else {
+            addMessage("AI 応答が取得できませんでした。", "bot");
+        }
 
     } catch (err) {
         console.error(err);

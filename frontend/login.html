@@ -11,40 +11,40 @@
 <button id="login-btn">ログイン</button>
 
 <script>
-const CLIENT_ID = "1vltl309a8prhlk9drhc0ofnff";
-const REDIRECT_URI = "https://d3hhstjr0rx2o4.cloudfront.net/callback.html";
-const COGNITO_DOMAIN = "https://ap-northeast-1fpwxyhi1o.auth.ap-northeast-1.amazoncognito.com";
+    const CLIENT_ID = "1vltl309a8prhlk9drhc0ofnff";
+    const REDIRECT_URI = "https://d3hhstjr0rx2o4.cloudfront.net/callback.html";
+    const COGNITO_DOMAIN = "https://ap-northeast-1fpwxyhi1o.auth.ap-northeast-1.amazoncognito.com";
 
-// PKCE 用コードチャレンジ生成
-async function generatePKCECodes() {
-    const array = new Uint8Array(32);
-    crypto.getRandomValues(array);
-    const codeVerifier = btoa(String.fromCharCode(...array))
-        .replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
+    // PKCE 用コードチャレンジ生成
+    async function generatePKCECodes() {
+        const array = new Uint8Array(32);
+        crypto.getRandomValues(array);
+        const codeVerifier = btoa(String.fromCharCode(...array))
+            .replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
 
-    const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(codeVerifier));
-    const codeChallenge = btoa(String.fromCharCode(...new Uint8Array(digest)))
-        .replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
+        const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(codeVerifier));
+        const codeChallenge = btoa(String.fromCharCode(...new Uint8Array(digest)))
+            .replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
 
-    localStorage.setItem("pkce_verifier", codeVerifier);
+        localStorage.setItem("pkce_verifier", codeVerifier);
 
-    return codeChallenge;
-}
+        return codeChallenge;
+    }
 
-document.getElementById("login-btn").addEventListener("click", async () => {
-    const codeChallenge = await generatePKCECodes();
+    document.getElementById("login-btn").addEventListener("click", async () => {
+        const codeChallenge = await generatePKCECodes();
 
-    const loginUrl =
-        COGNITO_DOMAIN + "/login" +
-        "?client_id=" + CLIENT_ID +
-        "&response_type=code" +
-        "&scope=openid+email" +
-        "&redirect_uri=" + encodeURIComponent(REDIRECT_URI) +
-        "&code_challenge=" + codeChallenge +
-        "&code_challenge_method=S256";
+        let loginUrl;
+        loginUrl = COGNITO_DOMAIN + "/login" +
+            "?client_id=" + CLIENT_ID +
+            "&response_type=code" +
+            "&scope=openid+email" +
+            "&redirect_uri=" + encodeURIComponent(REDIRECT_URI) +
+            "&code_challenge=" + codeChallenge +
+            "&code_challenge_method=S256";
 
-    window.location.href = loginUrl;
-});
+        window.location.href = loginUrl;
+    });
 </script>
 
 </body>

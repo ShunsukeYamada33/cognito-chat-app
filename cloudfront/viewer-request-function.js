@@ -1,7 +1,6 @@
 function handler(event) {
-    var request = event.request;
-    var headers = request.headers;
-    var uri = request.uri;
+    const request = event.request;
+    const uri = request.uri;
 
     function getCookie(request, name) {
         if (!request.cookies || !request.cookies[name]) return null;
@@ -21,7 +20,7 @@ function handler(event) {
     }
 
     // 認証チェック
-    var idToken = getCookie(request, "idToken");
+    const idToken = getCookie(request, "idToken");
 
     if (uri === "/" || uri.endsWith("index.html")) {
 
@@ -36,7 +35,7 @@ function handler(event) {
         }
 
         // 未認証 → Cognito へ
-        var login_url =
+        const login_url =
             'https://ap-northeast-1fpwxyhi1o.auth.ap-northeast-1.amazoncognito.com/login' +
             '?client_id=1vltl309a8prhlk9drhc0ofnff' +
             '&redirect_uri=https://d3hhstjr0rx2o4.cloudfront.net/login.html' +
@@ -45,7 +44,7 @@ function handler(event) {
         return {
             statusCode: 302,
             statusDescription: 'Found',
-            headers: { location: { value: login_url } }
+            headers: {location: {value: login_url}}
         };
     }
 
